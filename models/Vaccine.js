@@ -19,6 +19,14 @@ class Vaccine extends Model {
           to: "patient.id",
         },
       },
+	  company: {
+		relation: Model.BelongsToOneRelation,
+		modelClass: require("./Company"),
+		join: {
+			from: "vaccine.company_id",
+			to: "company.id"
+		}
+	  },
     };
   }
 }

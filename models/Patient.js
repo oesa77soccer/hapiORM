@@ -5,7 +5,6 @@ class Patient extends Model {
     return "patient";
   }
   static get relationMappings() {
-    //	const Film = require('Film');
     return {
       vaccines: {
         relation: Model.ManyToManyRelation,
