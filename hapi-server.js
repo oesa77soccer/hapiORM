@@ -44,7 +44,7 @@ const init = async () => {
       path: "/patient",
       handler: (request, h) => {
         //return "worked?";
-        Patient.query().insert(request.payload);
+        return Patient.query().insert(request.payload);
       },
     },
 
@@ -83,15 +83,18 @@ const init = async () => {
 
     {
       method: "GET",
-      path: "/patients{id}",
-      handler: (request, h) => {},
+      path: "/patients/{id}",
+      handler: (request, h) => {
+      	const id = request.params.id;
+	return Patient.query().findById(id).withGraphFetched("vaccines").first();
+      },
     },
 
     {
       method: "GET",
       path: "/vaccines",
       handler: (request, h) => {
-        return knex.select().from();
+        return Vaccine.query().withGraphFetched("company");
       },
     },
 
@@ -99,14 +102,16 @@ const init = async () => {
       method: "PATCH",
       path: "/patients/{id}",
       handler: (request, h) => {
-        return knex.select().from();
+        return Patient.query().findById(request.params.id).update(request.payload);
       },
     },
 
     {
       method: "DELETE",
       path: "/patients/{pid}/vaccines/{vid}",
-      handler: (request, h) => {},
+      handler: (request, h) => {
+      	return Patient.query().findById(request.params.pid).withGraphFetched("vaccines").deleteById(request.params.vid);
+      },
     },
   ]);
 
